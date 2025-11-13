@@ -19,9 +19,15 @@ BaselineOfMicrodown >> baseline: spec [
 			xmlParserHtml: spec;
 			mustache: spec;
 			gitBridge: spec.
-
+		" I disable this because against all my best effort, I cannot avoid the fucking pop up to raise 
+		even if I unload all the packages. I get the Microdown-RichTextComposer in conflict."
+			
 		spec preLoadDoIt: #'preload:package:'.
-
+		
+		
+		"I disable this because in a postload 
+			(IceRepository repositoryNamed: 'microdown') is nil and I do not get why"
+	
 		spec postLoadDoIt: #'postload:package:'.
 		
 		spec
@@ -37,7 +43,6 @@ BaselineOfMicrodown >> baseline: spec [
 				
 			package: #'Microdown-RichTextComposer'
 				with: [ spec requires: #( #Microdown ) ];
-				
 			package: #'Microdown-RichTextComposer-Tests'
 				with: [ spec requires: #( #'Microdown-RichTextComposer' ) ];
 
@@ -60,13 +65,12 @@ BaselineOfMicrodown >> baseline: spec [
 				with: [ spec requires: #( #'Microdown-HTMLExporter' 'Microdown-Tests' 'XMLParserHTML') ];			
 			
 			package: #'Microdown-LaTeXExporter'
-				with: [ spec requires: #( #Microdown ) ];
+				with: [ spec requires: #( #Microdown ) ];				
 			package: #'Microdown-LaTeXExporter-Tests'
 				with: [ spec requires: #( #'Microdown-LaTeXExporter' #'Microdown-Tests') ];
-	
+
 			package: #'Microdown-BeamerExporter'
 				with: [ spec requires: #( #'Microdown-LaTeXExporter' ) ];				
-	
 			package: #'Microdown-BeamerExporter-Tests'
 				with: [ spec requires: #( #'Microdown-LaTeXExporter-Tests') ];
 
@@ -89,12 +93,12 @@ BaselineOfMicrodown >> baseline: spec [
 			package: #'Microdown-Blog-Tests' with: [
 				spec requires: #( #'Microdown-Blog' 'GitBridge') ].
 		
+		"I do not want group without tests for now"
 		spec
-			group: 'Core' with: #('Microdown' 'Microdown-Tests');
+			group: 'Core' with: #('Microdown');
 			group: 'ForPharo' with: #('Microdown' #'Microdown-BrowserExtensions');
+			group: 'Tests' with: #('Core' 'Microdown-Tests');
 			group: 'RichText' with: #('Core' 'Microdown-RichTextComposer' );
-			group: 'Editor' with: #('RichText' #'Microdown-PrettyPrinter' #'Microdown-PrettyPrinter-Tests');
-			group: 'LaTeX' with:  #('Core' #'Microdown-LaTeXExporter' #'Microdown-LaTeXExporter-Tests');
 			group: 'Extensions' with: #(
 				#'Microdown-Evaluator'
 				#'Microdown-Evaluator-Tests'
@@ -111,15 +115,9 @@ BaselineOfMicrodown >> baseline: spec [
 				#'Microdown-BookTester-Tests'
 				#'Microdown-Blog'
 				#'Microdown-Blog-Tests'
+				
 				);
-			group: 'All' with: #('Core' #'Microdown-BrowserExtensions'  'Editor' 'LaTeX' 'Extensions' 'Microdown-Pharo-Tools' 'RichText')
-			]
-
-
-
-
-
-
+			group: 'All' with: #('Core' #'Microdown-BrowserExtensions' 'Tests' 'Extensions' 'Microdown-Pharo-Tools' 'RichText') ]
 ]
 
 { #category : 'baselines' }

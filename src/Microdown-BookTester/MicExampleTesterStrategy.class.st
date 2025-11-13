@@ -1,17 +1,6 @@
-"
-I'm responsible to validate that an example in a code block is correct.
-
-```example
-3 + 2 
->>> 5
-```
-
-The checking logic should probably be improved looking at the old book tester in old Pillar. 
-See [PDF explaining book tester](https://github.com/pillar-markup/BookTester/tree/main/ressources/OldBookTester)
-"
 Class {
 	#name : 'MicExampleTesterStrategy',
-	#superclass : 'MicCodeBlockTesterStrategy',
+	#superclass : 'MicBookTesterStrategy',
 	#category : 'Microdown-BookTester-Analysis',
 	#package : 'Microdown-BookTester',
 	#tag : 'Analysis'

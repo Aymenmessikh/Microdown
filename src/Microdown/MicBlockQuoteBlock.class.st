@@ -18,14 +18,13 @@ Class {
 
 { #category : 'visiting' }
 MicBlockQuoteBlock >> accept: aVisitor [
-
  	^ aVisitor visitQuote: self
 ]
 
 { #category : 'visiting' }
 MicBlockQuoteBlock >> closeMe [
-
 	super closeMe.
+	
 	children := self inlineParse: text
 ]
 

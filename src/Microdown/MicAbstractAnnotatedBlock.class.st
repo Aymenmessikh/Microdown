@@ -69,7 +69,7 @@ MicAbstractAnnotatedBlock >> createMicBlockQuoteBlock: line [
 
 { #category : 'actions' }
 MicAbstractAnnotatedBlock >> extractLine: line [
-	^ line allButFirst trim
+	^ (line copyFrom: 2 to: line size) trim
 ]
 
 { #category : 'public' }

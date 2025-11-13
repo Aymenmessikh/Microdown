@@ -173,7 +173,6 @@ MicInlineBlockWithUrl >> hasLabel [
 { #category : 'initialization' }
 MicInlineBlockWithUrl >> initialize [
 	super initialize.
-	children := #().
 	arguments := OrderedDictionary new.
 ]
 
@@ -185,8 +184,7 @@ MicInlineBlockWithUrl >> printOn: stream [
 		ch printOn: stream.
 		stream nextPut: Character space ].
 	stream << $].
-	url ifNotNil: [  
-		stream << $( << url << $) ]
+	stream << $( << url << $)
 ]
 
 { #category : 'accessing' }

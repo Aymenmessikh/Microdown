@@ -12,26 +12,6 @@ Class {
 	#tag : 'Analysis'
 }
 
-{ #category : 'instance creation' }
-MicAnalysisReportWriter class >> reportForFolder: folderReference startingFrom: fileReference [
-
-	| reporter checker validator |
-	reporter := self new.
-	
-	checker := MicReferenceChecker new.
-	checker fileSystem: folderReference.
-	checker checkProject: fileReference.
-
-	reporter addResults: checker results.
-
-	validator := MicCodeBlockValidator new.
-	checker fileSystem: folderReference.
-	checker checkProject: fileReference.
-	
-	reporter addResults: validator results.
-	^ reporter
-]
-
 { #category : 'adding' }
 MicAnalysisReportWriter >> addResults: aCollection [
 

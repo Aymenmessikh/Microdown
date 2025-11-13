@@ -5,12 +5,11 @@ Too many times I do not remember what I did and why.
 Class {
 	#name : 'MyLog',
 	#superclass : 'Object',
-	#category : 'Microdown-DevLog',
-	#package : 'Microdown',
-	#tag : 'DevLog'
+	#category : 'Microdown',
+	#package : 'Microdown'
 }
 
-{ #category : 'ui - dialogs' }
+{ #category : 'as yet unclassified' }
 MyLog >> l2025_08_08 [
 
 	^ '
@@ -45,37 +44,4 @@ visitParagraph: aParagraph
 ```
 	
 	'
-]
-
-{ #category : 'ui - dialogs' }
-MyLog >> l2025_08_11 [
-
-	^ '
-## 2025 08 11 
-
-#### Fix the visit of the paragraph
-	Now it uses <p> as before. Foliage generation is working. 
-	
-	'
-]
-
-{ #category : 'possible todos' }
-MyLog >> pt2025_08_16 [
-
-	^ '
-## 2025 08 16 
-
-- Anchor Linker Use - Investigate why it is not used.
-- Check with HTML exporter does not inherit from `MicDocumentWriter`
-- Check with textualexport does not inherit from `MicDocumentWriter`
-- MicCodeBlock API does not support the setting of text
-- body: set does not set the lement as children in a parent children relation
-- we should revisit all the parent/children and named instance variables
-	- we have caption and captionElements. This would indicate that 
-	elements are returned using xxxElements
-	- code:/body: is then expecting a string
-	- It means that bodyString: and bodyString are not good API.
-	
-	
-'
 ]
