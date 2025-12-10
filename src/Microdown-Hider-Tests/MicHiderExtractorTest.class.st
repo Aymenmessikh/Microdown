@@ -26,6 +26,34 @@ MicHiderExtractorTest >> testExtractChapterNumber [
 ]
 
 { #category : 'tests' }
+MicHiderExtractorTest >> testFullProcess [
+	| extractor |
+	testFile writeStreamDo: [:s | s nextPutAll: '```exercise&anchor=exfoo
+Foo >> bar
+some code
+```'].
+	extractor := MicHiderExtractor new sourceFile: testFile.
+	extractor process.
+	self assert: (testFile contents includesSubstring: '## Chapt').
+	self assert: (testFile contents includesSubstring: 'Foo >> bar').
+	self deny: (testFile contents includesSubstring: 'some code').
+	self assert: (testFolder / 'File1Solutions.md') exists
+]
+
+{ #category : 'tests' }
+MicHiderExtractorTest >> testWithIndentedCodeBlock [
+	| extractor |
+	testFile writeStreamDo: [:s | s nextPutAll: '    ```exercise&anchor=exfoo
+Foo >> bar
+code
+```'].
+	extractor := MicHiderExtractor new sourceFile: testFile.
+	extractor process.
+	self assert: (testFile contents includesSubstring: 'Foo >> bar').
+	self assert: (testFolder / 'File1Solutions.md') contents isNotEmpty
+]
+
+{ #category : 'tests' }
 MicHiderExtractorTest >> testWriteFile [
 	| extractor |
 	extractor := MicHiderExtractor new sourceFile: testFile.

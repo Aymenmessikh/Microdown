@@ -30,15 +30,31 @@ MicHiderExtractor >> extractChapterNumber [
 
 { #category : 'accessing' }
 MicHiderExtractor >> process [
-	| document studentVisitor solutionVisitor |
+	| document studentVisitor solutionVisitor cleanedContent |
 	self extractChapterNumber.
-	document := MicrodownParser parse: sourceFile contents.
+	cleanedContent := self removeIndentationFromCodeBlocks: sourceFile contents.
+	document := MicrodownParser parse: cleanedContent.
 	studentVisitor := MicHiderStudentVisitor new chapterNumber: chapterNumber.
 	solutionVisitor := MicHiderSolutionVisitor new chapterNumber: chapterNumber.
 	studentVisitor visit: document.
 	solutionVisitor visit: document.
 	self writeFile: sourceFile basename content: studentVisitor contents.
 	self writeFile: (sourceFile basenameWithoutExtension, 'Solutions.md') content: solutionVisitor contents
+]
+
+{ #category : 'removing' }
+MicHiderExtractor >> removeIndentationFromCodeBlocks: content [
+	| lines result stream trimmed |
+	lines := content lines.
+	result := String streamContents: [ :aStream |
+		stream := aStream.
+		lines do: [ :line |
+			trimmed := line trimLeft.
+			(trimmed beginsWith: '```')
+				ifTrue: [ stream nextPutAll: trimmed ]
+				ifFalse: [ stream nextPutAll: line ].
+			stream cr ] ].
+	^ result
 ]
 
 { #category : 'accessing' }
