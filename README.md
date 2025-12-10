@@ -1,292 +1,35 @@
-# Microdown Parser and Elements
+# Microdown Hider
 
-<a href="https://www.pharo.org">
-    <img alt="Pharo" src="https://img.shields.io/static/v1?style=for-the-badge&message=Pharo&color=3297d4&logo=Harbor&logoColor=FFFFFF&label=" />
-</a>
+Ce projet lit un fichier Microdown contenant des exercices et génère automatiquement :
 
-I'm a parser and object model for Microdown originally implemented by S. Ducasse, L. Dargaud and G. Polito. 
-The implementation is based on the work on markdown of K. Osterbye. 
-Further developments by S. Ducasse and K. Osterbye. 
+- une **version étudiante** (sans le code solution),
+- une **version solutions** (avec le code solution).
 
-Microdown is a smaller markdown but it is more extensible. It contains a nice builder and some visitors. 
-Microdown is now the default markup for the Pillar document compilation chain. 
+Le chapitre est détecté à partir du nom du dossier : `Chapter12` => `Chap12`.
 
+---
 
-## Install
+## Lancer le programme (Playground Pharo)
 
-```Smalltalk
-
-Smalltalk globals
-	at: #BaselineOfMicrodown 
-	ifPresent: [ :c | c removeFromSystem ].
-
-Metacello new
-	baseline: 'Microdown';
-	repository: 'github://pillar-markup/Microdown:v2.9.3/src';
-	onConflict: [ :ex | ex useIncoming ];
-	onUpgrade: [ :ex | ex useIncoming ];
-	load: #('All').
+### Linux / macOS
+```
+MicHiderExtractor new
+    sourceFile: (FileReference on: '/chemin/Chapter12/File1.md');
+    process.
 ```
 
-
-## Why should you use Microdown?
-
-Microdown is a smaller markdown but it is more extensible.
-It is used to produce books, slides, websites, doc.
-It can be read on GitHub but also on Pharo itself using the DocumentationBrowser
-
-It supports
-- Header
-- Lists
-- Paragraph
-- Code with arguments: key=val&key2=val2
-...
-
-But also 
-- Environment with arguments
-- Table
-- Anchor
-- Annotated paragraph
-- Math with arguments
-- and more intra-block elements such as extensible markups, raw, math, and references.
-
-
-![Microdown within the Pharo IDE.](screen.png)
-
-
-## Core Syntax in 2 seconds
-
+### Windows
 ```
-   	# Header
-        @anchor
-	% This is a line comment
-
-	```language=Pharo&caption=Beautiful&label=Fig1
-   	code
-	```
-   
-   	![Pharo is cool .%anchor=fig:pharo&width=80](http://pharo.org)
-	
-   	- list
-   	1. ordered list 
-
-  	`in text` and for Pharo hyperlinks to class, method and package: 
-  	`Point`, `Point class`, `Point>>#setX:setY:`, `#’Microdown-Tests’ (for packages)
-
-  	References: *@ref@*
-	
+MicHiderExtractor new
+    sourceFile: (FileReference on: 'C:\chemin\Chapter12\File1.md');
+    process.
 ```
 
-## Full Syntax
+---
 
-### Headers
-Similar to markdown headers are composed of `#` space text on one line.
-The headers can be from 1 to 6.
+## Résultat
 
-```
-### Header Level3
-```
-There is no support for other forms of declaration. 
+Dans le même dossier :
 
-### Anchors
-In Microdown we can define anchors and reference to them (see References).
-There are three ways to create anchors:
-
-- `@anchorlabel` will create an anchor to the preceding element. 
-- Figures, mathematical environments, and environment can specify labels as arguments (`anchor`)
-- Code block can specify label as argument (argument named `anchor`)
-
-### Various
-
-- % comments
-- *** horizontal line
-- File metadata is plain JSON
-
-```
-{
-"date" : "12 december 2025"
-}
-```
-- Raw text
-```
-{{ raw text }}
-```
-### Math support
-
-- `$$` mathematical environment with a label for easy referencing.
-
-```
-$$ %label=refToTheGreatEquation
-V_i = C_0 - C_3 
-$$
-```
-- Math in text
-
-```
-'abc$	V_i = C_0 - C_3	$def'.
-```
-will generate a LaTeX equivalent and can be referenced using `*@refToTheGreatEquation@`*
-
-### Codeblock
-
-Microdown offers the same code block that markdown but arguments can be specified and the annotation should be named. The first line after the \`\`\` can be `language=pharo&label=code1&caption=this is my great piece of code`
-
-The following code is not able to display it because markdown quote blocks are strange and interpret nested blocks. So we cannot use quoteblock for quoting!
-
-``` 
-   ```language=pharo&anchor=code1&caption=this is my great piece of code
-    codeBlockMarkupString
-    ^ '```'
-    ```
-```
-````
-```language=pharo&anchor=code1&caption=this is my great piece of code
-codeBlockMarkupString
-   ^ '\`\`\`'
-```
-````
-
-
-### Extensions
-
-- `{! aTag | parameters!}` is the way to use an extension with parameters
-- Environments are defined using `<!tag | parameters !>`
-
-```
-<!agenda|title=International Workshop on Smalltalk Technologies
-
-<!day|start=2023 August 29th&title=Monday
-
-<!segment|start=10:30
-
-<!talk|subject=Pharo DataFrame: Past, Present, and Future&length=30&author=Safina, Zaitsev, Ferlicot-Delbecque and Sow&room=Room B!>
-<!talk|subject=Improving Performance Through Object Lifetime Profiling: the DataFrame Case&length=30&author=Jordan-Montaño, Palumbo, Polito, Ducasse and Tesone&room=Room B!> <!talk|subject=Garbage Collector Tuning in Pathological Allocation Pattern Applications&length=30&author=Palumbo, Jordan-Montaño, Polito, Tesone and Ducasse&room=Room B!>
-!>
-!>
-!>
-```  
-- Citations `{!citation|ref=Blac09a!}` -- note that the bib file should be defined in the pillar.conf file
-
-
-## Known limits
-
-#### Math should be tested
-
-#### Quote block
-When a line starts with '> ' it delimits a quoteblock.
-The markup is not interpreted. 
-
-#### Codeblock 
-Codeblock does not support more than four backticks.
-
-
-## Development in Pharo 13!
-
-### Loading specific version
-
-To load the latest stable version load the master. If you have trouble loading in the latest Pharo just execute the preloading.st script in the .github folder. This script will remove the existing Microdown package and clear the system.
-You can also execute the script provided below. 
-
-
-```Smalltalk
-Metacello new
-  baseline: 'Microdown';
-  repository: 'github://pillar-markup/Microdown:master/src';
-  load.
-```
-
-The process is the following:
-- Development happens dev.
-- When stable dev -> in master.
-- When we can build books master is tagged.
-- Then there is the Pharo integration in dedicated branches.
-
-
-### Loading the latest development version
-
-The following script loads all groups in the Baseline:
-
-```Smalltalk
-
-
-Smalltalk globals
-	at: #BaselineOfMicrodown 
-	ifPresent: [ :c | c removeFromSystem ].
-
-Metacello new
-	baseline: 'Microdown';
-	repository: 'github://pillar-markup/Microdown:dev/src';
-	onConflict: [ :ex | ex useIncoming ];
-	onUpgrade: [ :ex | ex useIncoming ];
-	load: #('All').
-```
-
-In addition you may want to execute this before. 
-```
-#( 'Microdown' ) do: [ :name |
-        (IceRepository repositoryNamed: name)
-            ifNil: [ self inform: 'Project not found: ' , name ]
-            ifNotNil: [ :found |
-                found
-                    unload;
-                    forget ] ].
-```
-
-## History
-
-We have two sources: 
-- Pharo in one hand (a minimal version managed with the pharo* branches) and
-- Pillar (eg. all the tools and support for slides and books) and both are not totally synchronized. 
-
-Now we also maintain different versions between Pharo versions. Currently the situation is the following:
-
-Working with Pharo 13: 
-- v2.9.2 a little release to support Foliage v2.1.0 and two new release of Pillar (probably one for P13 and one for P13 dropping pillar format).
-- v2.9.1 provides a better integration with Pillar (the Microdown visitors were not used before even if they worked)
-v2.7.x
--  v2.7.2 merge pharo 13 changes / added gitbridge / OCompiler migration / cleaning syntax description / Ready for Pillar and Foliage
--  v2.7.1 LatexQuoteblock-should-not-use-verbatim
--  v2.7.0 Fix some errors and API/clients of the textualbuilder
-
-
-Working with Pharo 12: v2.5.x
-- v2.5.6 - Change html visitor and test for annotated paragraph
-- v2.5.5 - add support for top-level header as slide definition
-- v2.5.4 - add backward compatible anchor in caption + tonel V3 format
-- v2.5.1 - add LaTeX math with reference support for Pharo 12 and Pillar development up to v10.0.0
-
-- v2.4.2 for Pillar 9.0.1
-
-Watch out v2.6.0 is older than v.2.5.4
-
-### Extract of Pillar History
-
-For Pharo 12
-- v10.0.0 but with some links problems due to new inline parser using MD v2.5.0
-
-For Pharo 11
-- v9.0.1 Fixing link problems.
-- v9.0.0 loading in Pharo 11. The development will now happen in P11.
-
-For Pharo 10
--v8.3.2 fixed baseline and updated readme
-
-
-
-
-## Implementation
-
-The parser follows the design mentioned in [https://github.github.com/gfm](https://github.github.com/gfm), in particular the parsing strategy in Appendix A.
-
-In short, the strategy is that at any point in time, we might have several children of the root which are ""open"". The deepest in open in the tree is called ""current"". All the parents of the current are open. 
-
-When a new line is read we do the following:
-
-1. Check if the new line can be consumed by current.
-	- as part of this a child of current can be made which can consume the new line
-2. If current cannot consume the new line, we close current, move current to its parent, and repeat 1.
-3. The root node can consume anything, for instance by making new nodes for storing the new line.
-4. The root node is not closed until input is exhausted
-
-The other packages in this repository are the extensions made to produce Pillar model. 
-Such packages should be moved in the future to other locations (probably pillar itself).
+- `File1.md` : version étudiante  
+- `File1Solutions.md` : solutions
