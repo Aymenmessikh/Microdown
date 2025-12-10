@@ -49,6 +49,5 @@ MicHiderStudentVisitor >> visitRoot: aRoot [
 		header: [:b | b text: 'Chapt'] withLevel: 2;
 		anchor: 'Chap', chapterNumber;
 		newLine.
-	aRoot children do: [:child | 
-		(child isKindOf: MicCodeBlock) ifTrue: [child accept: self]]
+	self visitChildrenOf: aRoot.
 ]
