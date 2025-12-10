@@ -5,7 +5,7 @@ Ce projet lit un fichier Microdown contenant des exercices et génère automatiq
 - une **version étudiante** (sans le code solution),
 - une **version solutions** (avec le code solution).
 
-Le chapitre est détecté à partir du nom du dossier : `Chapter12` → `Chap12`.
+Le chapitre est détecté à partir du nom du dossier : `Chapter12` => `Chap12`.
 
 ---
 
@@ -31,5 +31,5 @@ MicHiderExtractor new
 
 Dans le même dossier :
 
-- `File1.md` → version étudiante  
-- `File1Solutions.md` → solutions
+- `File1.md` : version étudiante  
+- `File1Solutions.md` : solutions
